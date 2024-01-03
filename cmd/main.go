@@ -1,17 +1,25 @@
 package main
 
 import (
-	"net/http"
-
+	"fmt"
 	"github.com/go-chi/chi/v5"
-	"github.com/go-chi/chi/v5/middleware"
+	"go-basic/src/views"
+	"net/http"
 )
 
 func main() {
-	r := chi.NewRouter()
-	r.Use(middleware.Logger)
-	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("Hello World!"))
-	})
-	http.ListenAndServe(":3000", r)
+	mainrouter := chi.NewRouter()
+	// 创建二级路由，用户路由
+	userouter := chi.NewRouter()
+	userouter.Post("/userinfo", views.Useradd)
+
+	// 将二级路由挂载到一级路由中
+	mainrouter.Mount("/user", userouter)
+	// 启动web服务
+	err := http.ListenAndServe(":3000", mainrouter)
+	if err != nil {
+		panic("服务启动异常")
+	} else {
+		fmt.Println("服务启动正常,端口号为:3000")
+	}
 }
