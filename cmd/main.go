@@ -1,9 +1,9 @@
 package main
 
 import (
+	"basic/src/views"
 	"fmt"
 	"github.com/go-chi/chi/v5"
-	"go-basic/src/views"
 	"net/http"
 )
 
